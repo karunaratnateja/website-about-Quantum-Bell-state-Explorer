@@ -1,0 +1,84 @@
+*
+{
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ font-family: 'Poppins', sans-serif;
+}
+body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+ background-image: url(https://t3.ftcdn.net/jpg/16/04/55/64/240_F_1604556422_NvKFcBStF4TrKDNCdB1052fEG1K2BJ4P.jpg);
+  background-size: cover;
+
+}
+header
+{
+ justify-content: top;
+    font-size: large;
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+}
+nav{
+ position: relative;
+ width: 700px;
+ height: 50px;
+ background: #222;
+ border-radius: 8px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+nav a{
+    position: relative;
+    display: inline-block;
+    font-size: 1em;
+    font-weight: 500;
+    color: #fff;
+    text-decoration: none;
+    padding: 0 23px;
+    z-index: 1;
+}
+nav span
+ {
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 95px;
+ height: 100%;
+ background: linear-gradient(45deg, #191d4f, #337aff);
+ border-radius: 10px;
+ transition: .5s;
+}
+
+nav a:nth-child(1):hover~span
+{
+    left: 0;
+}
+nav a:nth-child(2):hover~span
+{
+    left: 120px;
+}
+nav a:nth-child(3):hover~span
+{
+    left: 210px;
+    width: 110px;
+}
+nav a:nth-child(4):hover~span
+{
+    left: 330px;
+    width: 115px;
+
+}
+nav a:nth-child(5):hover~span
+{
+    left: 445px;
+    width: 110px;
+}
+nav a:nth-child(6):hover~span
+{
+    left: 580px;
+    width: 120px;
+}

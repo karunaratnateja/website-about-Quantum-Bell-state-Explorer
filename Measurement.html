@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bell State Measurement Simulator</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: linear-gradient(45deg, #191d4f, #337aff);
+        }
+        h1 {
+            color: #ece6ea;
+        }
+        select, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 10px 20px;
+        }
+        canvas {
+            background: #dce4ec;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Bell State Measurement Simulator</h1>
+
+<label>Select Bell State:</label>
+<select id="bellState">
+    <option value="phiPlus">Φ⁺ (|00⟩ + |11⟩)/√2</option>
+    <option value="phiMinus">Φ⁻ (|00⟩ - |11⟩)/√2</option>
+    <option value="psiPlus">Ψ⁺ (|01⟩ + |10⟩)/√2</option>
+    <option value="psiMinus">Ψ⁻ (|01⟩ - |10⟩)/√2</option>
+</select>
+
+<br>
+
+<button onclick="simulate()">Measure</button>
+
+<h2 id="result"></h2>
+
+<h3>Probability Table</h3>
+<table>
+    <thead>
+        <tr>
+            <th>State</th>
+            <th>Probability</th>
+        </tr>
+    </thead>
+    <tbody id="probTable"></tbody>
+</table>
+
+<h3>Probability Graph</h3>
+<canvas id="graph" width="400" height="300"></canvas>
+
+<script>
+function getProbabilities(state) {
+    switch(state) {
+        case "phiPlus":
+        case "phiMinus":
+            return { "00": 0.5, "11": 0.5, "01": 0, "10": 0 };
+        case "psiPlus":
+        case "psiMinus":
+            return { "01": 0.5, "10": 0.5, "00": 0, "11": 0 };
+    }
+}
+
+function simulate() {
+    const state = document.getElementById("bellState").value;
+    const probs = getProbabilities(state);
+
+    // Random measurement
+    let rand = Math.random();
+    let cumulative = 0;
+    let result = "";
+
+    for (let key in probs) {
+        cumulative += probs[key];
+        if (rand <= cumulative) {
+            result = key;
+            break;
+        }
+    }
+
+    document.getElementById("result").innerText = "Measured State: |" + result + "⟩";
+
+    updateTable(probs);
+    drawGraph(probs);
+}
+
+function updateTable(probs) {
+    const table = document.getElementById("probTable");
+    table.innerHTML = "";
+
+    for (let key in probs) {
+        let row = `<tr>
+            <td>|${key}⟩</td>
+            <td>${(probs[key] * 100).toFixed(1)}%</td>
+        </tr>`;
+        table.innerHTML += row;
+    }
+}
+
+function drawGraph(probs) {
+    const canvas = document.getElementById("graph");
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const keys = Object.keys(probs);
+    const barWidth = 60;
+    const gap = 30;
+
+    keys.forEach((key, index) => {
+        let height = probs[key] * 200;
+        let x = index * (barWidth + gap) + 40;
+        let y = canvas.height - height - 30;
+
+        ctx.fillStyle = "#4CAF50";
+        ctx.fillRect(x, y, barWidth, height);
+
+        ctx.fillStyle = "#000";
+        ctx.fillText(key, x + 20, canvas.height - 10);
+        ctx.fillText((probs[key]*100)+"%", x + 10, y - 5);
+    });
+}
+</script>
+
+</body>
+</html>
